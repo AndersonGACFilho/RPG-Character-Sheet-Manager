@@ -1,6 +1,9 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.Repository.User;
 
+import br.ufg.fullstack.rpg_character_sheet_manager.Repository.Sheets.CharacterSheet;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity(name = "Person")
 public class User {
@@ -15,6 +18,9 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<CharacterSheet> characterSheet;
+
     // Constructor
     public User() {
     }
@@ -27,34 +33,43 @@ public class User {
     }
 
     // Get id
-    public Integer getId() {
+    public Integer GetId() {
         return id;
     }
 
     // Getters and Setters for username
-    public String getUserName() {
+    public String SetUserName() {
         return username;
     }
-    public void setUserName(String username) {
+    public void SetUserName(String username) {
         this.username = username;
     }
 
     // Getters and Setters for password
-    public String getPassword() {
+    public String SetPassword() {
         return password;
     }
-    public void setPassword(String password) {
+    public void SetPassword(String password) {
         this.password = password;
     }
 
     // Getters and Setters for email
-    public String getEmail() {
+    public String SetEmail() {
         return email;
     }
-    public void setEmail(String email) {
+    public void SetEmail(String email) {
         this.email = email;
     }
 
+    // Getters and Setters for characterSheet
+    public List<CharacterSheet> SetCharacterSheet() { return characterSheet; }
+    public void SetCharacterSheet(List<CharacterSheet> characterSheet) { this.characterSheet = characterSheet; }
+
+    //Add and Remove a characterSheet
+    public void addCharacterSheet(CharacterSheet characterSheet) { this.characterSheet.add(characterSheet); }
+    public void removeCharacterSheet(CharacterSheet characterSheet) { this.characterSheet.remove(characterSheet); }
+
+    
     // toString
     @Override
     public String toString() {
