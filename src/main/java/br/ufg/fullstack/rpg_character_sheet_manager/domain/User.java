@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Represents a user in the system.
  */
-@Entity
+@Entity(name = "person")
 public class User {
 
     /**
