@@ -34,6 +34,10 @@ public class UserMapper implements Mapper<User, UserDTO> {
      */
     @Override
     public User toEntity(UserDTO userDTO) {
+        Optional<User> userOpt = userRepo.findById(userDTO.getId());
+        if(userOpt.isPresent())
+            return userOpt.get();
+        
         User user = new User();
         // Map UserDTO properties to User entity
         user.setId(userDTO.getId());
