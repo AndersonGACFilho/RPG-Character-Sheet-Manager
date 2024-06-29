@@ -1,5 +1,6 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -39,6 +40,7 @@ public class GameSession {
     /**
      * The list of users who are players in the game session.
      */
+    @JsonBackReference
     @ManyToMany(mappedBy = "sessionsAsPlayer")
     private List<User> players;
 

@@ -1,5 +1,6 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -54,6 +55,7 @@ public class User {
     /**
      * The list of game sessions where the user is a player.
      */
+    @JsonManagedReference
     @ManyToMany()
     @JoinTable(
             name = "user_session",
