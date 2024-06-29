@@ -1,15 +1,14 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.services;
 
 import br.ufg.fullstack.rpg_character_sheet_manager.domain.User;
-import br.ufg.fullstack.rpg_character_sheet_manager.dtos.UserDTO;
-import br.ufg.fullstack.rpg_character_sheet_manager.mappers.UserMapper;
+import br.ufg.fullstack.rpg_character_sheet_manager.exceptions.ResourceNotFoundException;
 import br.ufg.fullstack.rpg_character_sheet_manager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -21,71 +20,65 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserMapper userMapper;
-
     /**
-     * Retrieves all users and converts them to UserDTOs.
-     *
-     * @return a list of UserDTOs
+     * Retrieves all users and converts them to Users.
+     * @param page the page number
+     * @return a list of Users
      */
-    public List<UserDTO> getAllUsers() {
-        // Fetch all User entities from the repository
-        return userRepository.findAll().stream()
-                // Convert each User entity to a UserDTO
-                .map(userMapper::toDto)
-                // Collect the results into a list
-                .collect(Collectors.toList());
+
+    public Page<User> getAllUsers(Integer page) {
+        PageRequest pageable = PageRequest.of(page, 10);
+        return userRepository.findAll(pageable);
     }
 
     /**
-     * Retrieves a user by ID and converts it to a UserDTO.
+     * Retrieves a user by ID and converts it to a User.
      *
      * @param id the user ID
-     * @return an Optional containing the UserDTO if found, or empty if not
+     * @return an Optional containing the User if found, or empty if not
      * found
      */
-    public Optional<UserDTO> getUserById(Long id) {
+    public User getUserById(Long id) {
         // Fetch the User entity by ID from the repository
-        return userRepository.findById(id)
-                // Convert the User entity to a UserDTO
-                .map(userMapper::toDto);
+        Optional<User> user = userRepository.findById(id);
+        // If the User entity was found, convert it to a User and return it
+        // If the User entity was not found, throw a ResourceNotFoundException
+        return user.orElseThrow( () -> new ResourceNotFoundException("User not found"));
     }
 
     /**
-     * Creates a new user and converts it to a UserDTO.
+     * Creates a new user and converts it to a User.
      *
-     * @param userDTO the UserDTO
-     * @return the created UserDTO
+     * @param user the User
+     * @return the created User
      */
-    public UserDTO createUser(UserDTO userDTO) {
-        // Convert the UserDTO to a User entity
-        User user = userMapper.toEntity(userDTO);
+    public User createUser(User user) {
         // Save the User entity to the repository
-        User savedUser = userRepository.save(user);
-        // Convert the saved User entity back to a UserDTO
-        return userMapper.toDto(savedUser);
+        // Convert the saved User entity back to a User
+        return userRepository.save(user);
     }
 
     /**
-     * Updates an existing user and converts it to a UserDTO.
+     * Updates an existing user and converts it to a User.
      *
-     * @param id the user ID
-     * @param userDTO the UserDTO with updated data
-     * @return an Optional containing the updated UserDTO if the user was found,
+     * @param updatedUser the User with updated data
+     * @return an Optional containing the updated User if the user was found,
      * or empty if not found
      */
-    public Optional<UserDTO> updateUser(Long id, UserDTO userDTO) {
+    public User updateUser(User updatedUser) {
         // Fetch the existing User entity by ID from the repository
-        return userRepository.findById(id).map(existingUser -> {
-            // Update the existing User entity with new data
-            existingUser.setUsername(userDTO.getUsername());
-            existingUser.setPassword(userDTO.getPassword());
-            // Save the updated User entity to the repository
-            User updatedUser = userRepository.save(existingUser);
-            // Convert the updated User entity back to a UserDTO
-            return userMapper.toDto(updatedUser);
+        Optional<User> existingUser = userRepository.findById(updatedUser.getId());
+
+        // If the User entity was found, update it and save it to the repository
+        existingUser.ifPresent(user -> {
+            user.setUsername(updatedUser.getUsername());
+            user.setPassword(updatedUser.getPassword());
+            user.setEmail(updatedUser.getEmail());
+            user.setFirstName(updatedUser.getFirstName());
+            user.setLastName(updatedUser.getLastName());
+            userRepository.save(user);
         });
+        return existingUser.orElseThrow( () -> new ResourceNotFoundException("User not found"));
     }
 
     /**

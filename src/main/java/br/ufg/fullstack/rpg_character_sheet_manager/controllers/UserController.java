@@ -1,13 +1,11 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.controllers;
 
-import br.ufg.fullstack.rpg_character_sheet_manager.dtos.UserDTO;
+import br.ufg.fullstack.rpg_character_sheet_manager.domain.User;
 import br.ufg.fullstack.rpg_character_sheet_manager.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * REST controller for managing users.
@@ -24,10 +22,10 @@ public class UserController {
      *
      * @return a list of UserDTOs
      */
-    @GetMapping
-    public List<UserDTO> getAllUsers() {
+    @GetMapping("/page/{page}")
+    public Page<User> getAllUsers(@PathVariable Integer page) {
         // Call the service to get all users
-        return userService.getAllUsers();
+        return userService.getAllUsers(page);
     }
 
     /**
@@ -38,24 +36,22 @@ public class UserController {
      * Found if not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         // Call the service to get the user by ID
-        Optional<UserDTO> user = userService.getUserById(id);
-        // Return the user if found, or 404 Not Found if not found
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
     }
 
     /**
      * Creates a new user.
      *
-     * @param userDTO the UserDTO
-     * @return a ResponseEntity containing the created UserDTO
+     * @param user the User to create
+     * @return a ResponseEntity containing the created user
      */
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         // Call the service to create a new user
-        UserDTO savedUser = userService.createUser(userDTO);
+        User savedUser = userService.createUser(user);
         // Return the created user
         return ResponseEntity.ok(savedUser);
     }
@@ -69,13 +65,12 @@ public class UserController {
      * found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id,
-                                              @RequestBody UserDTO userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id,
+                                           @RequestBody User userDetails) {
         // Call the service to update the user
-        Optional<UserDTO> updatedUser = userService.updateUser(id, userDetails);
-        // Return the updated user if found, or 404 Not Found if not found
-        return updatedUser.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        User updatedUser = userService.updateUser(userDetails);
+        // Return the updated user
+        return ResponseEntity.ok(updatedUser);
     }
 
     /**

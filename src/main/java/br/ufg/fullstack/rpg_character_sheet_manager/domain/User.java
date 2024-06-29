@@ -24,6 +24,22 @@ public class User {
     private String username;
 
     /**
+     * The first name of the user.
+     */
+    private String firstName;
+
+    /**
+     * The last name of the user.
+     */
+    private String lastName;
+
+    /**
+     * The email of the user.
+     */
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    /**
      * The password of the user.
      */
     @Column(nullable = false)
@@ -38,7 +54,7 @@ public class User {
     /**
      * The list of game sessions where the user is a player.
      */
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "user_session",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -51,6 +67,43 @@ public class User {
      */
     @OneToMany(mappedBy = "owner")
     private List<CharacterSheet> characterSheets;
+
+    // Adders and removers
+    /**
+     * Adds a game session where the user is a player.
+     *
+     * @param session the game session where the user is a player
+     */
+    public void addSessionAsMaster(GameSession session) {
+        sessionsAsMaster.add(session);
+    }
+
+    /**
+     * Removes a game session where the user is a player.
+     *
+     * @param session the game session where the user is a player
+     */
+    public void removeSessionAsMaster(GameSession session) {
+        sessionsAsMaster.remove(session);
+    }
+
+    /**
+     * Adds a game session where the user is a player.
+     *
+     * @param session the game session where the user is a player
+     */
+    public void addSessionAsPlayer(GameSession session) {
+        sessionsAsPlayer.add(session);
+    }
+
+    /**
+     * Removes a game session where the user is a player.
+     *
+     * @param session the game session where the user is a player
+     */
+    public void removeSessionAsPlayer(GameSession session) {
+        sessionsAsPlayer.remove(session);
+    }
 
     // Getters and setters
 
@@ -88,6 +141,60 @@ public class User {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    /**
+     * Gets the email.
+     *
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Sets the email.
+     *
+     * @param email the email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Gets the first name.
+     *
+     * @return the first name
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Sets the first name.
+     *
+     * @param firstName the first name
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * Gets the last name.
+     *
+     * @return the last name
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Sets the last name.
+     *
+     * @param lastName the last name
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     /**

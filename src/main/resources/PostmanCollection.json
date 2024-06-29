@@ -11,12 +11,14 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/users",
+          "raw": "{{baseUrl}}/users/page/:page",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
-            "users"
+            "users",
+            "page",
+            ":page"
           ]
         }
       }
@@ -120,6 +122,121 @@
               "key": "id",
               "value": "1"
             }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get All Game Sessions",
+        "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+            "raw": "{{baseUrl}}/game-sessions/page/:page",
+            "host": [
+                "{{baseUrl}}"
+            ],
+            "path": [
+                "game-sessions",
+                "page",
+                ":page"
+            ]
+            }
+        }
+    },
+    {
+      "name": "Get Game Session by ID",
+        "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+            "raw": "{{baseUrl}}/game-sessions/:id",
+            "host": [
+                "{{baseUrl}}"
+            ],
+            "path": [
+                "game-sessions",
+                ":id"
+            ],
+            "variable": [
+                {
+                "key": "id",
+                "value": "1"
+                }
+            ]
+            }
+        }
+    },
+    {
+      "name": "Create Game Session",
+        "request": {
+            "method": "POST",
+            "header": [
+            {
+                "key": "Content-Type",
+                "value": "application/json"
+            }
+            ],
+            "body": {
+            "mode": "raw",
+            "raw": "{\n\t\"name\": \"newgame\",\n\t\"description\": \"new game description\",\n\t\"gameMaster\": \"1\"\n}"
+            },
+            "url": {
+            "raw": "{{baseUrl}}/game-sessions",
+            "host": [
+                "{{baseUrl}}"
+            ],
+            "path": [
+                "game-sessions"
+            ]
+            }
+        }
+    },
+    {
+      "name": "Update Game Session",
+        "request": {
+            "method": "PUT",
+            "header": [
+            {
+                "key": "Content-Type",
+                "value": "application/json"
+            }
+            ],
+            "body": {
+            "mode": "raw",
+            "raw": "{\n\t\"name\": \"updatedgame\",\n\t\"description\": \"updated game description\",\n\t\"gameMaster\": \"1\"\n}"
+            },
+            "url": {
+            "raw": "{{baseUrl}}/game-sessions/:id",
+            "host": [
+                "{{baseUrl}}"
+            ],
+            "path": [
+                "game-sessions",
+                ":id"
+            ],
+            "variable": [
+                {
+                "key": "id",
+                "value": "1"
+                }
+            ]
+            }
+        }
+    },
+    {
+      "name": "Delete Game Session",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/game-sessions/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "game-sessions",
+            ":id"
           ]
         }
       }
