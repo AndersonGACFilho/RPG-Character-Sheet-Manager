@@ -1,13 +1,12 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
 import jakarta.persistence.*;
-import java.util.Objects;
 
-/**
- * Represents a character sheet in the system.
- */
+import java.io.Serializable;
+
 @Entity
-public class CharacterSheet {
+public class CharacterSheet implements Serializable{
+    private static final long serialVersionUID = 1L;
 
     /**
      * The unique identifier for the character sheet.
@@ -23,34 +22,60 @@ public class CharacterSheet {
     private String name;
 
     /**
-     * The user who owns the character sheet.
+     * The description of the character.
+     */
+    @Column(nullable = false)
+    private String description;
+
+    /**
+     * The background of the character.
+     */
+    @Column(nullable = false)
+    private String background;
+
+    /**
+     * The alignment of the character.
      */
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    private CharacterAlignment alignment;
+
+    /**
+     * Status of the character, if it is alive or dead.
+     */
+    @Column(nullable = false)
+    private boolean alive;
+
+    /**
+     * The type of the character, if it is a player or a non-player character.
+     */
+    @Column(nullable = false)
+    private boolean player;
+
+    /**
+     * The user that owns the character.
+     */
+    @ManyToOne
     private User owner;
 
     /**
-     * The game session to which the character sheet belongs.
+     * The game session where the character is being played.
      */
     @ManyToOne
-    @JoinColumn(name = "session_id", nullable = false)
     private GameSession session;
 
     // Getters and setters
 
     /**
-     * Gets the character sheet ID.
-     *
-     * @return the character sheet ID
+     * Gets the unique identifier of the character sheet.
+     * @return the unique identifier of the character sheet.
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * Sets the character sheet ID.
-     *
-     * @param id the character sheet ID
+     * Sets the unique identifier of the character sheet.
+     * @param id the unique identifier of the character sheet.
      */
     public void setId(Long id) {
         this.id = id;
@@ -58,8 +83,7 @@ public class CharacterSheet {
 
     /**
      * Gets the name of the character.
-     *
-     * @return the name of the character
+     * @return the name of the character.
      */
     public String getName() {
         return name;
@@ -67,78 +91,138 @@ public class CharacterSheet {
 
     /**
      * Sets the name of the character.
-     *
-     * @param name the name of the character
+     * @param name the name of the character.
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * Gets the user who owns the character sheet.
-     *
-     * @return the user who owns the character sheet
+     * Gets the description of the character.
+     * @return the description of the character.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets the description of the character.
+     * @param description the description of the character.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Gets the background of the character.
+     * @return the background of the character.
+     */
+    public String getBackground() {
+        return background;
+    }
+
+    /**
+     * Sets the background of the character.
+     * @param background the background of the character.
+     */
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
+    /**
+     * Gets the alignment of the character.
+     * @return the alignment of the character.
+     */
+    public CharacterAlignment getAlignment() {
+        return alignment;
+    }
+
+    /**
+     * Sets the alignment of the character.
+     * @param alignment the alignment of the character.
+     */
+    public void setAlignment(CharacterAlignment alignment) {
+        this.alignment = alignment;
+    }
+
+    /**
+     * Gets the status of the character, if it is alive or dead.
+     * @return the status of the character, if it is alive or dead.
+     */
+    public boolean isAlive() {
+        return alive;
+    }
+
+    /**
+     * Sets the status of the character, if it is alive or dead.
+     * @param alive the status of the character, if it is alive or dead.
+     */
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    /**
+     * Gets the type of the character, if it is a player or a non-player character.
+     * @return the type of the character, if it is a player or a non-player character.
+     */
+    public boolean isPlayer() {
+        return player;
+    }
+
+    /**
+     * Sets the type of the character, if it is a player or a non-player character.
+     * @param player the type of the character, if it is a player or a non-player character.
+     */
+    public void setPlayer(boolean player) {
+        this.player = player;
+    }
+
+    /**
+     * Gets the user that owns the character.
+     * @return the user that owns the character.
      */
     public User getOwner() {
         return owner;
     }
 
     /**
-     * Sets the user who owns the character sheet.
-     *
-     * @param owner the user who owns the character sheet
+     * Sets the user that owns the character.
+     * @param owner the user that owns the character.
      */
     public void setOwner(User owner) {
         this.owner = owner;
     }
 
     /**
-     * Gets the game session to which the character sheet belongs.
-     *
-     * @return the game session to which the character sheet belongs
+     * Gets the game session where the character is being played.
+     * @return the game session where the character is being played.
      */
     public GameSession getSession() {
         return session;
     }
 
     /**
-     * Sets the game session to which the character sheet belongs.
-     *
-     * @param session the game session to which the character sheet belongs
+     * Sets the game session where the character is being played.
+     * @param session the game session where the character is being played.
      */
     public void setSession(GameSession session) {
         this.session = session;
     }
 
-    /**
-     * Checks if this character sheet is equal to another object.
-     *
-     * @param o the object to compare
-     * @return true if the objects are equal, false otherwise
-     */
+    // Equals and hashCode
+
     @Override
     public boolean equals(Object o) {
-        // Check if the object is compared with itself
         if (this == o) return true;
-        // Check if the object is an instance of CharacterSheet
         if (o == null || getClass() != o.getClass()) return false;
-        // Typecast the object to CharacterSheet
+
         CharacterSheet that = (CharacterSheet) o;
-        // Compare the fields for equality
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(owner, that.owner) &&
-                Objects.equals(session, that.session);
+
+        return id.equals(that.id);
     }
 
-    /**
-     * Generates a hash code for this character sheet.
-     *
-     * @return the hash code
-     */
     @Override
     public int hashCode() {
-        // Generate a hash code using the id, name, owner, and session fields
-        return Objects.hash(id, name, owner, session);
+        return id.hashCode();
     }
 }

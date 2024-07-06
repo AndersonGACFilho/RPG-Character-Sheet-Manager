@@ -1,6 +1,8 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.repositories;
 
 import br.ufg.fullstack.rpg_character_sheet_manager.domain.GameSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,8 +14,9 @@ public interface GameSessionRepository extends JpaRepository<GameSession, Long> 
     /**
      * Finds a game sessions by master.
      * @param masterId the master ID
+     * @param pageable the pagination information
      */
-    List<GameSession> findByMasterId(Long masterId);
+    Page<GameSession> findByMasterId(Long masterId, Pageable pageable);
 
     /**
      * Finds a game sessions by player.

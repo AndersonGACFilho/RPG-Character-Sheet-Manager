@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 /**
  * REST controller for managing users.
@@ -23,9 +26,11 @@ public class UserController {
      * @return a list of UserDTOs
      */
     @GetMapping("/page/{page}")
-    public Page<User> getAllUsers(@PathVariable Integer page) {
+    public ResponseEntity<Page<User>> getAllUsers(@PathVariable Integer page) {
         // Call the service to get all users
-        return userService.getAllUsers(page);
+        Page<User> users = userService.getAllUsers(page);
+        // Return the list of users
+        return ResponseEntity.ok(users);
     }
 
     /**
@@ -39,6 +44,7 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         // Call the service to get the user by ID
         User user = userService.getUserById(id);
+        // Return the user
         return ResponseEntity.ok(user);
     }
 
@@ -49,11 +55,14 @@ public class UserController {
      * @return a ResponseEntity containing the created user
      */
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<Void> createUser(@RequestBody User user) {
         // Call the service to create a new user
         User savedUser = userService.createUser(user);
+        // URI of the created user
+        URI userURI = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(savedUser.getId()).toUri();
         // Return the created user
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.created(userURI).build();
     }
 
     /**
@@ -65,12 +74,12 @@ public class UserController {
      * found, or 404 Not Found if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id,
+    public ResponseEntity<Void> updateUser(@PathVariable Long id,
                                            @RequestBody User userDetails) {
         // Call the service to update the user
-        User updatedUser = userService.updateUser(userDetails);
+        userService.updateUser(userDetails, id);
         // Return the updated user
-        return ResponseEntity.ok(updatedUser);
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -83,7 +92,7 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         // Call the service to delete the user
         userService.deleteUser(id);
-        // Return a 200 OK response
-        return ResponseEntity.ok().build();
+        // Return a 204 No Content response
+        return ResponseEntity.noContent().build();
     }
 }

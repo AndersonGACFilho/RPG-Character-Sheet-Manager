@@ -4,6 +4,7 @@ import br.ufg.fullstack.rpg_character_sheet_manager.domain.User;
 import br.ufg.fullstack.rpg_character_sheet_manager.exceptions.ResourceNotFoundException;
 import br.ufg.fullstack.rpg_character_sheet_manager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -62,23 +63,15 @@ public class UserService {
      * Updates an existing user and converts it to a User.
      *
      * @param updatedUser the User with updated data
-     * @return an Optional containing the updated User if the user was found,
-     * or empty if not found
+     * @param id
      */
-    public User updateUser(User updatedUser) {
-        // Fetch the existing User entity by ID from the repository
-        Optional<User> existingUser = userRepository.findById(updatedUser.getId());
-
-        // If the User entity was found, update it and save it to the repository
-        existingUser.ifPresent(user -> {
-            user.setUsername(updatedUser.getUsername());
-            user.setPassword(updatedUser.getPassword());
-            user.setEmail(updatedUser.getEmail());
-            user.setFirstName(updatedUser.getFirstName());
-            user.setLastName(updatedUser.getLastName());
-            userRepository.save(user);
-        });
-        return existingUser.orElseThrow( () -> new ResourceNotFoundException("User not found"));
+    public void updateUser(User updatedUser, Long id) {
+        // Force the User entity to have the ID of the UserDTO
+        updatedUser.setId(id);
+        // get the User entity by ID from the service
+        User user = getUserById(id);
+        // save the updated User entity to the repository
+        userRepository.save(updatedUser);
     }
 
     /**
@@ -87,7 +80,13 @@ public class UserService {
      * @param id the user ID
      */
     public void deleteUser(Long id) {
-        // Delete the User entity by ID from the repository
-        userRepository.deleteById(id);
+        try{
+            // Delete the User entity by ID from the repository
+            userRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            // If the User entity is still referenced by another entity, throw a
+            // ResourceNotFoundException
+            throw new ResourceNotFoundException("User is still referenced by another entity");
+        }
     }
 }

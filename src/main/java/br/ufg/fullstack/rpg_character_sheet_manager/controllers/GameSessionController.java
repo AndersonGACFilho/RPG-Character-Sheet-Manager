@@ -4,9 +4,11 @@ import br.ufg.fullstack.rpg_character_sheet_manager.domain.GameSession;
 import br.ufg.fullstack.rpg_character_sheet_manager.services.GameSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/game-sessions")
@@ -16,14 +18,19 @@ public class GameSessionController {
     private GameSessionService gameSessionService;
 
     /**
-     * Retrieves all game sessions, by master.
+     * Retrieves all game sessions, by master, with pagination.
      * @param masterId the master ID
-     * @return a list of GameSessionDTOs
+     * @return a list of GameSessions with pagination
      */
-    @GetMapping("master/{masterId}")
-    public List<GameSession> getGameSessionsByMasterId(@PathVariable Long masterId) {
+    @GetMapping("master/{masterId}/page/{page}")
+    public ResponseEntity<Page<GameSession>> getGameSessionsByMasterId(@PathVariable Long masterId,
+       @PathVariable Integer page)
+    {
         // Call the service to get all game sessions by master
-        return gameSessionService.getGameSessionsByMasterId(masterId);
+        Page<GameSession> gameSessions =
+                gameSessionService.getGameSessionsByMasterId(masterId,page);
+        // Return the list of game sessions with pagination and HTTP status code 200
+        return ResponseEntity.ok(gameSessions);
     }
 
     /**
@@ -32,9 +39,11 @@ public class GameSessionController {
      * @return a GameSession
     */
     @GetMapping("/{id}")
-    public GameSession getGameSessionById(@PathVariable Long id) {
+    public ResponseEntity<GameSession> getGameSessionById(@PathVariable Long id) {
         // Call the service to get the game session by ID
-        return gameSessionService.getGameSessionById(id);
+        GameSession gameSession = gameSessionService.getGameSessionById(id);
+        // Return the game session with HTTP status code 200
+        return ResponseEntity.ok(gameSession);
     }
 
     /**
@@ -44,31 +53,43 @@ public class GameSessionController {
      * @return a GameSession
      */
     @PostMapping("master/{masterId}")
-    public GameSession createGameSession(@RequestBody GameSession gameSession, @PathVariable Long masterId) {
+    public ResponseEntity<Void> createGameSession(@RequestBody GameSession gameSession,
+        @PathVariable Long masterId) {
         // Call the service to create a new game session
-        return gameSessionService.createGameSession(gameSession, masterId);
+        GameSession createdGameSession = gameSessionService.createGameSession(gameSession, masterId);
+        // Get the URI of the created game session
+        URI gameSessionURI = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(createdGameSession.getId()).toUri();
+        // Return the created game session with HTTP status code 201
+        return ResponseEntity.created(gameSessionURI).build();
     }
 
     /**
      * Retrieves all game sessions with pagination.
      * @param page the page number
-     * @return a list of GameSessionDTOs
+     * @return a list of GameSession
      */
     @GetMapping("/page/{page}")
-    public Page<GameSession> getAllGameSessions(@PathVariable int page) {
+    public ResponseEntity<Page<GameSession>> getAllGameSessions(@PathVariable int page) {
         // Call the service to get all game sessions with pagination
-        return gameSessionService.getAllGameSessions(page);
+        Page<GameSession> allGameSessions = gameSessionService.getAllGameSessions(page);
+        // Return the list of game sessions with pagination and HTTP status code 200
+        return ResponseEntity.noContent().build();
     }
 
     /**
      * Updates an existing game session.
      * @param gameSession the GameSession to update
-     * @return a GameSession
+     * @return a ResponseEntity with status 204 No Content
      */
-    @PutMapping
-    public GameSession updateGameSession(@RequestBody GameSession gameSession) {
+    @PutMapping("master/{masterId}/{id}")
+    public ResponseEntity<Void> updateGameSession(@RequestBody GameSession gameSession,
+        @PathVariable Long id)
+    {
         // Call the service to update the game session
-        return gameSessionService.updateGameSession(gameSession);
+        gameSessionService.updateGameSession(gameSession, id);
+        // Return the updated game session with HTTP status code No Content (204)
+        return ResponseEntity.noContent().build();
     }
 
     /**
@@ -76,8 +97,10 @@ public class GameSessionController {
      * @param id the game session ID
      */
     @DeleteMapping("/{id}")
-    public void deleteGameSession(@PathVariable Long id) {
-        // Call the service to delete the game session by ID
+    public  ResponseEntity<Void> deleteGameSession(@PathVariable Long id) {
+        // Call the service to delete the game session
         gameSessionService.deleteGameSession(id);
+        // Return HTTP status code 200 OK
+        return ResponseEntity.noContent().build();
     }
 }

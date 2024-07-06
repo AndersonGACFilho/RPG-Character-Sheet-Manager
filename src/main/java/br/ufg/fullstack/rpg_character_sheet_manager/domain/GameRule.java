@@ -1,77 +1,107 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.io.Serializable;
 
 @Entity
 public class GameRule implements Serializable {
-    private static final long serialVersionUID = 1L;
 
     /**
-     * The unique identifier for the GameRule.
+     * The unique identifier for the game rule.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The name of the game rule.
+     */
+    @Column(nullable = false)
+    private String name;
+
+    /**
+     * The description of the game rule.
+     */
+    @Column(nullable = false)
     private String description;
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
+    /**
+     * The name of the game rule.
+     */
+    @ManyToOne
+    @JoinColumn(name = "game_session_id")
+    private GameSession gameSession;
+
+    public GameRule() {
     }
 
+    public GameRule(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    /**
+     * Gets the unique identifier of the game rule.
+     * @return the unique identifier of the game rule.
+     */
     public Long getId() {
-        return id;
+        return this.id;
     }
 
+    /**
+     * Sets the unique identifier of the game rule.
+     * @param id the unique identifier of the game rule.
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Gets the name of the game rule.
+     * @return the name of the game rule.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the name of the game rule.
+     * @param name the name of the game rule.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Gets the description of the game rule.
+     * @return the description of the game rule.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the description of the game rule.
+     * @param description the description of the game rule.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        return result;
+    /**
+     * Gets the game session to which the game rule belongs.
+     * @return the game session to which the game rule belongs.
+     */
+    public GameSession getGameSession() {
+        return gameSession;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GameRule other = (GameRule) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
-            return false;
-        return true;
+    /**
+     * Sets the game session to which the game rule belongs.
+     * @param gameSession the game session to which the game rule belongs.
+     */
+    public void setGameSession(GameSession gameSession) {
+        this.gameSession = gameSession;
     }
-
-    
-
-
 }
