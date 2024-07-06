@@ -46,10 +46,11 @@ public class CharacterSheet implements Serializable{
     private boolean alive;
 
     /**
-     * The type of the character, if it is a player or a non-player character.
+     * The type of the character, if it is a player, a non-player character or a monster.
      */
     @Column(nullable = false)
-    private boolean player;
+    @Enumerated(EnumType.STRING)
+    private SheetType type;
 
     /**
      * The user that owns the character.
@@ -162,19 +163,19 @@ public class CharacterSheet implements Serializable{
     }
 
     /**
-     * Gets the type of the character, if it is a player or a non-player character.
-     * @return the type of the character, if it is a player or a non-player character.
+     * Gets the type of the character, if it is a player, a non-player character or a monster.
+     * @return the type of the character, if it is a player, a non-player character or a monster.
      */
-    public boolean isPlayer() {
-        return player;
+    public SheetType getType() {
+        return type;
     }
 
     /**
-     * Sets the type of the character, if it is a player or a non-player character.
-     * @param player the type of the character, if it is a player or a non-player character.
+     * Sets the type of the character, if it is a player, a non-player character or a monster.
+     * @param type the type of the character, if it is a player, a non-player character or a monster.
      */
-    public void setPlayer(boolean player) {
-        this.player = player;
+    public void setType(SheetType type) {
+        this.type = type;
     }
 
     /**
