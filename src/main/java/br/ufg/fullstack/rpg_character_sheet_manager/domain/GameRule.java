@@ -1,15 +1,17 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+/**
+ * Represents a game rule in the RPG.
+ */
 @Entity
-public class GameRule implements Serializable {
+public class GameRule {
 
-    /**
-     * The unique identifier for the game rule.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,30 +19,27 @@ public class GameRule implements Serializable {
     /**
      * The name of the game rule.
      */
-    @Column(nullable = false)
     private String name;
 
     /**
      * The description of the game rule.
      */
-    @Column(nullable = false)
     private String description;
 
     /**
-     * The name of the game rule.
+     * The game session the rule belongs to.
      */
     @ManyToOne
     @JoinColumn(name = "game_session_id")
+    @JsonIgnore
     private GameSession gameSession;
 
-    public GameRule() {
-    }
+    public GameRule() {}
 
     public GameRule(String name, String description) {
         this.name = name;
         this.description = description;
     }
-
     /**
      * Gets the unique identifier of the game rule.
      * @return the unique identifier of the game rule.

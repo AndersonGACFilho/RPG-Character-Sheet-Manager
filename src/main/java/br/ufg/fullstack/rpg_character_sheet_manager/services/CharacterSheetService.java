@@ -5,10 +5,12 @@ import br.ufg.fullstack.rpg_character_sheet_manager.domain.User;
 import br.ufg.fullstack.rpg_character_sheet_manager.exceptions.ResourceNotFoundException;
 import br.ufg.fullstack.rpg_character_sheet_manager.repositories.CharacterSheetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,24 +20,48 @@ public class CharacterSheetService {
     @Autowired
     private CharacterSheetRepository characterSheetRepository;
     @Autowired
+    @Lazy
     private UserService userService;
 
     /**
      * Get all character sheets by page
-     * @param page
+     *
+     * @param page the page number
+     * @param size the number of items per page
+     * @param sortBy the field to sort by
+     * @param order the sort order
      * @return Page<CharacterSheet> with all character sheets
      */
-    public Page<CharacterSheet> getAllCharacterSheets(Integer page) {
+    public Page<CharacterSheet> getAllCharacterSheets(Integer page,
+        Integer size, String sortBy, String order)
+    {
         // Create a pageable object to return only 10 results per page
-        PageRequest pageable = PageRequest.of(page, 10);
-
+        PageRequest pageable = PageRequest.of(page, size,
+            Sort.Direction.fromString(order), sortBy);
         // Return all character sheets
         return characterSheetRepository.findAll(pageable);
     }
 
     /**
+     * Get all character sheets by user
+     * @param userId the user ID
+     * @param page the page number
+     * @param size the number of items per page
+     * @param sortBy the field to sort by a character sheet field
+     * @param order the sort order
+     * @return Page<CharacterSheet> with all character sheets
+     */
+    public Page<CharacterSheet> getCharacterSheetsByUserId(Long userId,
+                                                           Integer page, Integer size, String sortBy, String order) {
+        // Create a pageable object to return only 10 results per page
+        Pageable pageable = PageRequest.of(page, 10);
+        // Return all character sheets by user
+        return characterSheetRepository.findByOwnerId(userId, pageable);
+    }
+
+    /**
      * Get a character sheet by ID
-     * @param id
+     * @param id the character sheet ID
      * @return CharacterSheet with the given ID
      */
     public CharacterSheet getCharacterSheetById(Long id) {
@@ -47,7 +73,7 @@ public class CharacterSheetService {
 
     /**
      * Create a new character sheet
-     * @param characterSheet
+     * @param characterSheet the character sheet to create
      * @return CharacterSheet created
      */
     public CharacterSheet createCharacterSheet(CharacterSheet characterSheet, Long userId) {
@@ -64,8 +90,8 @@ public class CharacterSheetService {
 
     /**
      * Update a character sheet
-     * @param characterSheet
-     * @param id
+     * @param characterSheet the character sheet to update
+     * @param id the character sheet ID
      */
     public void updateCharacterSheet(CharacterSheet characterSheet, Long id) {
         // Find the character sheet by ID
@@ -78,28 +104,25 @@ public class CharacterSheetService {
 
     /**
      * Delete a character sheet
-     * @param id
+     * @param id the character sheet ID
      */
     public void deleteCharacterSheet(Long id) {
         try {
-            // Delete the character sheet by ID
+            // Get the character sheet by ID
+            CharacterSheet characterSheet = getCharacterSheetById(id);
+            // Get the owner of the character sheet
+            User owner = characterSheet.getOwner();
+            // Remove the character sheet from the owner
+            owner.removeCharacterSheet(characterSheet);
+            // Save the owner
+            userService.updateUser(owner, owner.getId());
+            // Remove the owner from the character sheet
+            characterSheet.setOwner(null);
+            // Delete the character sheet
             characterSheetRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             // If the character sheet was not found, throw a DataIntegrityViolationException
             throw new DataIntegrityViolationException("Character sheet not found");
         }
-    }
-
-    /**
-     * Get all character sheets by user
-     * @param userId
-     * @param page
-     * @return Page<CharacterSheet> with all character sheets
-     */
-    public Page<CharacterSheet> getCharacterSheetsByUserId(Long userId, Integer page) {
-        // Create a pageable object to return only 10 results per page
-        Pageable pageable = PageRequest.of(page, 10);
-        // Return all character sheets by user
-        return characterSheetRepository.findByOwnerId(userId, pageable);
     }
 }

@@ -1,252 +1,1210 @@
 {
-  "info": {
-    "name": "RPG Character Sheet Manager",
-    "description": "Postman collection for testing the RPG Character Sheet Manager API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "item": [
-    {
-      "name": "Get All Users",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/users/page/:page",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "users",
-            "page",
-            ":page"
-          ]
-        }
-      }
-    },
-    {
-      "name": "Get User by ID",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/users/:id",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "users",
-            ":id"
-          ],
-          "variable": [
-            {
-              "key": "id",
-              "value": "1"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Create User",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n\t\"username\": \"newuser\",\n\t\"password\": \"password123\"\n}"
-        },
-        "url": {
-          "raw": "{{baseUrl}}/users",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "users"
-          ]
-        }
-      }
-    },
-    {
-      "name": "Update User",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n\t\"username\": \"updateduser\",\n\t\"password\": \"newpassword123\"\n}"
-        },
-        "url": {
-          "raw": "{{baseUrl}}/users/:id",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "users",
-            ":id"
-          ],
-          "variable": [
-            {
-              "key": "id",
-              "value": "1"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Delete User",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/users/:id",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "users",
-            ":id"
-          ],
-          "variable": [
-            {
-              "key": "id",
-              "value": "1"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Get All Game Sessions",
-        "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-            "raw": "{{baseUrl}}/game-sessions/page/:page",
-            "host": [
-                "{{baseUrl}}"
-            ],
-            "path": [
-                "game-sessions",
-                "page",
-                ":page"
-            ]
-            }
-        }
-    },
-    {
-      "name": "Get Game Session by ID",
-        "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-            "raw": "{{baseUrl}}/game-sessions/:id",
-            "host": [
-                "{{baseUrl}}"
-            ],
-            "path": [
-                "game-sessions",
-                ":id"
-            ],
-            "variable": [
-                {
-                "key": "id",
-                "value": "1"
-                }
-            ]
-            }
-        }
-    },
-    {
-      "name": "Create Game Session",
-        "request": {
-            "method": "POST",
-            "header": [
-            {
-                "key": "Content-Type",
-                "value": "application/json"
-            }
-            ],
-            "body": {
-            "mode": "raw",
-            "raw": "{\n\t\"name\": \"newgame\",\n\t\"description\": \"new game description\",\n\t\"gameMaster\": \"1\"\n}"
-            },
-            "url": {
-            "raw": "{{baseUrl}}/game-sessions",
-            "host": [
-                "{{baseUrl}}"
-            ],
-            "path": [
-                "game-sessions"
-            ]
-            }
-        }
-    },
-    {
-      "name": "Update Game Session",
-        "request": {
-            "method": "PUT",
-            "header": [
-            {
-                "key": "Content-Type",
-                "value": "application/json"
-            }
-            ],
-            "body": {
-            "mode": "raw",
-            "raw": "{\n\t\"name\": \"updatedgame\",\n\t\"description\": \"updated game description\",\n\t\"gameMaster\": \"1\"\n}"
-            },
-            "url": {
-            "raw": "{{baseUrl}}/game-sessions/:id",
-            "host": [
-                "{{baseUrl}}"
-            ],
-            "path": [
-                "game-sessions",
-                ":id"
-            ],
-            "variable": [
-                {
-                "key": "id",
-                "value": "1"
-                }
-            ]
-            }
-        }
-    },
-    {
-      "name": "Delete Game Session",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/game-sessions/:id",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "game-sessions",
-            ":id"
-          ]
-        }
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080",
-      "type": "string"
-    }
-  ]
+	"info": {
+		"_postman_id": "01bce152-b93e-41fe-ab80-99f896a89bb1",
+		"name": "RPG Character Sheet Manager",
+		"description": "Postman collection for testing the RPG Character Sheet Manager API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19034392"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"newuser{{$isoTimestamp}}\",\n  \"password\": \"password123\",\n  \"email\": \"newuser@example.com{{$isoTimestamp}}\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Game Session",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"New Game Session\",\n  \"description\": \"Description of the game session\",\n  \"gameMaster\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/game-sessions/master/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-sessions",
+						"master",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Character Alignment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Lawful Good\",\n  \"description\": \"Description of Lawful Good\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/character-alignments",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-alignments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Character Sheet",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Character Name\",\n  \"description\": \"Character Description\",\n  \"background\": \"Character Background\",\n  \"alignment\": {\n    \"id\": 1\n  },\n  \"alive\": true,\n  \"type\": \"PLAYER\",\n  \"owner\": {\n    \"id\": 1\n  },\n  \"session\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/character-sheets/user/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-sheets",
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Story",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"New Story\",\n  \"description\": \"Description of the story\",\n  \"gameSession\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/stories",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Game Rule",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"New Game Rule\",\n  \"description\": \"Description of the game rule\",\n  \"gameSession\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/game-rules",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-rules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content array should exist and be an array\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.content).to.exist;",
+							"    pm.expect(responseData.content).to.be.an('array');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pageable object is present in the response\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.pageable).to.exist;",
+							"});",
+							"",
+							"",
+							"pm.test(\"TotalElements and totalPages are non-negative integers\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.totalElements).to.be.a('number').and.to.be.at.least(0);",
+							"    pm.expect(responseData.totalPages).to.be.a('number').and.to.be.at.least(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/users/page?page=0&size=24&sortBy=id&order=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"page"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "24"
+						},
+						{
+							"key": "sortBy",
+							"value": "id"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/users/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Game Sessions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content array is present and empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.content).to.be.an('array').and.to.be.empty;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pageable object contains the expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.exist.and.to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.have.property('pageNumber');",
+							"    pm.expect(responseData.pageable).to.have.property('pageSize');",
+							"    pm.expect(responseData.pageable.sort).to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.have.property('offset');",
+							"    pm.expect(responseData.pageable).to.have.property('paged');",
+							"    pm.expect(responseData.pageable).to.have.property('unpaged');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Validate that totalElements, totalPages, size, number, and numberOfElements are all 0\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    responseData.content.forEach(function(item) {",
+							"        pm.expect(item.totalElements).to.equal(0);",
+							"        pm.expect(item.totalPages).to.equal(0);",
+							"        pm.expect(item.size).to.equal(0);",
+							"        pm.expect(item.number).to.equal(0);",
+							"        pm.expect(item.numberOfElements).to.equal(0);",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game-sessions/page/0?size=24&sortBy=id&order=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-sessions",
+						"page",
+						"0"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "24"
+						},
+						{
+							"key": "sortBy",
+							"value": "id"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Game Sessions by Master ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('content');",
+							"    pm.expect(responseData).to.have.property('pageable');",
+							"    pm.expect(responseData).to.have.property('last');",
+							"    pm.expect(responseData).to.have.property('totalElements');",
+							"    pm.expect(responseData).to.have.property('totalPages');",
+							"    pm.expect(responseData).to.have.property('size');",
+							"    pm.expect(responseData).to.have.property('number');",
+							"    pm.expect(responseData).to.have.property('sort');",
+							"    pm.expect(responseData).to.have.property('numberOfElements');",
+							"    pm.expect(responseData).to.have.property('first');",
+							"    pm.expect(responseData).to.have.property('empty');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content array is present and empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.content).to.exist;",
+							"    pm.expect(responseData.content).to.be.an('array').that.is.empty;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pageable object should be present and contain expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.exist;",
+							"    pm.expect(responseData.pageable).to.have.property('pageNumber');",
+							"    pm.expect(responseData.pageable).to.have.property('pageSize');",
+							"    pm.expect(responseData.pageable).to.have.property('sort');",
+							"    pm.expect(responseData.pageable).to.have.property('offset');",
+							"    pm.expect(responseData.pageable).to.have.property('paged');",
+							"    pm.expect(responseData.pageable).to.have.property('unpaged');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game-sessions/master/1/page/0",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-sessions",
+						"master",
+						"1",
+						"page",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Game Session by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game-sessions/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-sessions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Character Sheets",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('content');",
+							"    pm.expect(responseData).to.have.property('pageable');",
+							"    pm.expect(responseData).to.have.property('last');",
+							"    pm.expect(responseData).to.have.property('totalElements');",
+							"    pm.expect(responseData).to.have.property('totalPages');",
+							"    pm.expect(responseData).to.have.property('size');",
+							"    pm.expect(responseData).to.have.property('number');",
+							"    pm.expect(responseData).to.have.property('sort');",
+							"    pm.expect(responseData).to.have.property('numberOfElements');",
+							"    pm.expect(responseData).to.have.property('first');",
+							"    pm.expect(responseData).to.have.property('empty');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content array is present and empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.content).to.be.an('array').that.is.empty;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pageable object contains expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.pageable).to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.include.all.keys('pageNumber', 'pageSize', 'sort', 'offset', 'paged', 'unpaged');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/character-sheets/page?page=0&size=24&sortBy=id&order=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-sheets",
+						"page"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "24"
+						},
+						{
+							"key": "sortBy",
+							"value": "id"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Character Sheets by User ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response content type is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content array is present and empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData).to.have.property('content').that.is.an('array').and.to.be.empty;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pageable object structure and properties are valid\", function () {",
+							"    const responseData = pm.response.json();",
+							"",
+							"    pm.expect(responseData.pageable).to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.have.property('pageNumber');",
+							"    pm.expect(responseData.pageable).to.have.property('pageSize');",
+							"    pm.expect(responseData.pageable).to.have.property('sort').to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.have.property('offset');",
+							"    pm.expect(responseData.pageable).to.have.property('paged');",
+							"    pm.expect(responseData.pageable).to.have.property('unpaged');",
+							"});",
+							"",
+							"",
+							"pm.test(\"All relevant properties should have value 0\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.totalElements).to.equal(0);",
+							"  pm.expect(responseData.totalPages).to.equal(0);",
+							"  pm.expect(responseData.size).to.equal(0);",
+							"  pm.expect(responseData.number).to.equal(0);",
+							"  pm.expect(responseData.numberOfElements).to.equal(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/character-sheets/user/1?page=0&size=24&sortBy=id&order=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-sheets",
+						"user",
+						"1"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "24"
+						},
+						{
+							"key": "sortBy",
+							"value": "id"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Character Sheet by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/character-sheets/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-sheets",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Stories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"  pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response content has the required fields\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData).to.have.property('content');",
+							"    pm.expect(responseData).to.have.property('pageable');",
+							"    pm.expect(responseData).to.have.property('last');",
+							"    pm.expect(responseData).to.have.property('totalElements');",
+							"    pm.expect(responseData).to.have.property('totalPages');",
+							"    pm.expect(responseData).to.have.property('size');",
+							"    pm.expect(responseData).to.have.property('number');",
+							"    pm.expect(responseData).to.have.property('sort');",
+							"    pm.expect(responseData).to.have.property('numberOfElements');",
+							"    pm.expect(responseData).to.have.property('first');",
+							"    pm.expect(responseData).to.have.property('empty');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content array is present and empty\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.content).to.exist.and.to.be.an('array').that.is.empty;",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pageable object has expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.pageable).to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.have.property('pageNumber');",
+							"    pm.expect(responseData.pageable).to.have.property('pageSize');",
+							"    pm.expect(responseData.pageable).to.have.property('sort');",
+							"    pm.expect(responseData.pageable).to.have.property('offset');",
+							"    pm.expect(responseData.pageable).to.have.property('paged');",
+							"    pm.expect(responseData.pageable).to.have.property('unpaged');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/stories/page?page=0&size=24&sortBy=id&order=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stories",
+						"page"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "24"
+						},
+						{
+							"key": "sortBy",
+							"value": "id"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Story by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/stories/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stories",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Game Rules",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Response has the required fields - id, name, and description\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.content).to.be.an('array');",
+							"    ",
+							"    responseData.content.forEach(function(item) {",
+							"        pm.expect(item).to.have.property('id');",
+							"        pm.expect(item).to.have.property('name');",
+							"        pm.expect(item).to.have.property('description');",
+							"    });",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content array is present and has expected number of elements\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.content).to.exist;",
+							"    pm.expect(responseData.content).to.be.an('array');",
+							"    pm.expect(responseData.content).to.have.lengthOf(1);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Pageable object has expected properties\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData.pageable).to.be.an('object');",
+							"    pm.expect(responseData.pageable).to.have.property('pageNumber');",
+							"    pm.expect(responseData.pageable).to.have.property('pageSize');",
+							"    pm.expect(responseData.pageable).to.have.property('sort');",
+							"    pm.expect(responseData.pageable).to.have.property('offset');",
+							"    pm.expect(responseData.pageable).to.have.property('paged');",
+							"    pm.expect(responseData.pageable).to.have.property('unpaged');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game-rules/page?page=0&size=24&sortBy=id&order=asc",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-rules",
+						"page"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "24"
+						},
+						{
+							"key": "sortBy",
+							"value": "id"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Game Rule by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {",
+							"    pm.expect(pm.response.code).to.equal(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Content-Type header is application/json\", function () {",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Id, name, and description fields must exist in the response\", function () {",
+							"  const responseData = pm.response.json();",
+							"  ",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+							"  pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+							"  pm.expect(responseData.description).to.exist.and.to.be.a('string');",
+							"});",
+							"",
+							"",
+							"pm.test(\"Name is a non-empty string\", function () {",
+							"    const responseData = pm.response.json();",
+							"    ",
+							"    pm.expect(responseData).to.be.an('object');",
+							"    pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");",
+							"});",
+							"",
+							"",
+							"pm.test(\"Description is a non-empty string\", function () {",
+							"  const responseData = pm.response.json();",
+							"",
+							"  pm.expect(responseData).to.be.an('object');",
+							"  pm.expect(responseData.description).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Description should not be empty\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game-rules/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-rules",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"updateduser\",\n  \"password\": \"newpassword123\",\n  \"email\": \"updateduser@example.com\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/users/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Game Session",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Updated Game Session\",\n  \"description\": \"Updated description of the game session\",\n  \"gameMaster\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/game-sessions/master/1/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-sessions",
+						"master",
+						"1",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Character Alignment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Updated Alignment Name\",\n  \"description\": \"Updated Alignment Description\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/character-alignments/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-alignments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Character Sheet",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Updated Character Name\",\n  \"description\": \"Updated Character Description\",\n  \"background\": \"Updated Character Background\",\n  \"alignment\": {\n    \"id\": 1\n  },\n  \"alive\": false,\n  \"type\": \"NPC\",\n  \"owner\": {\n    \"id\": 1\n  },\n  \"session\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/character-sheets/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-sheets",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Story",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Updated Story Title\",\n  \"description\": \"Updated Story Description\",\n  \"gameSession\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/stories/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stories",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Game Rule",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Updated Game Rule Name\",\n  \"description\": \"Updated Game Rule Description\",\n  \"gameSession\": {\n    \"id\": 1\n  }\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/game-rules/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-rules",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/users/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Game Session",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game-sessions/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-sessions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Character Alignment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/character-alignments/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-alignments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Character Sheet",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/character-sheets/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"character-sheets",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Story",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/stories/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"stories",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Game Rule",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/game-rules/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"game-rules",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
 }

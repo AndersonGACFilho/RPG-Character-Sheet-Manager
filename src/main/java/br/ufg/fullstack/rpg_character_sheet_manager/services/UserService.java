@@ -1,14 +1,22 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.services;
 
+import br.ufg.fullstack.rpg_character_sheet_manager.domain.CharacterSheet;
+import br.ufg.fullstack.rpg_character_sheet_manager.domain.GameSession;
 import br.ufg.fullstack.rpg_character_sheet_manager.domain.User;
 import br.ufg.fullstack.rpg_character_sheet_manager.exceptions.ResourceNotFoundException;
 import br.ufg.fullstack.rpg_character_sheet_manager.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,15 +28,26 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    @Lazy
+    private CharacterSheetService characterSheetService;
+    @Autowired
+    @Lazy
+    private GameSessionService gameSessionService;
 
     /**
      * Retrieves all users and converts them to Users.
-     * @param page the page number
+     *
+     * @param page   the page number
+     * @param size  the number of users per page
+     * @param sortBy the field to sort by
+     * @param order the sort order
      * @return a list of Users
      */
-
-    public Page<User> getAllUsers(Integer page) {
-        PageRequest pageable = PageRequest.of(page, 10);
+    public Page<User> getAllUsers(Integer page, Integer size, String sortBy,
+        String order) {
+        PageRequest pageable = PageRequest.of(page, size,
+            Sort.Direction.fromString(order), sortBy);
         return userRepository.findAll(pageable);
     }
 
@@ -76,17 +95,67 @@ public class UserService {
 
     /**
      * Deletes a user by ID.
-     *
      * @param id the user ID
      */
+    @Transactional(rollbackOn = Exception.class)
     public void deleteUser(Long id) {
-        try{
-            // Delete the User entity by ID from the repository
-            userRepository.deleteById(id);
+        try {
+            User user = getUserById(id);
+
+            // Remove all character sheets from the user
+            List<CharacterSheet> characterSheets =
+                    new ArrayList<>(user.getCharacterSheets());
+            for (CharacterSheet characterSheet : characterSheets) {
+                characterSheetService.deleteCharacterSheet(characterSheet.getId());
+                user.getCharacterSheets().remove(characterSheet);
+            }
+
+            // Delete GameSessions where the user is a master
+            List<GameSession> sessionsAsMaster =
+                    new ArrayList<>(user.getSessionsAsMaster());
+            for (GameSession session : sessionsAsMaster) {
+                gameSessionService.deleteGameSession(session.getId());
+                user.getSessionsAsMaster().remove(session);
+            }
+
+            // Remove the user from all GameSessions where the user is a player
+            List<GameSession> sessionsAsPlayer =
+                    new ArrayList<>(user.getSessionsAsPlayer());
+            for (GameSession session : sessionsAsPlayer) {
+                gameSessionService.removePlayerFromGameSession(user.getId(),
+                        session.getId());
+                user.getSessionsAsPlayer().remove(session);
+            }
+
+            // Finally delete the user
+            userRepository.delete(user);
         } catch (DataIntegrityViolationException e) {
-            // If the User entity is still referenced by another entity, throw a
-            // ResourceNotFoundException
-            throw new ResourceNotFoundException("User is still referenced by another entity");
+            throw new DataIntegrityViolationException(
+                    "User is still referenced by another entity", e);
+        }
+    }
+
+
+
+
+    /**
+     * Adds a user as a player to a game session.
+     * @param id the user ID
+     * @param gameSessionId the game session ID
+     */
+    public void removePlayerFromGameSession(Long id, Long gameSessionId){
+        try{
+            // Find the user by ID
+            User user = getUserById(id);
+            // Find the game session by ID
+            GameSession gameSession = gameSessionService.
+                    getGameSessionById(gameSessionId);
+            // Remove the user from the game session
+            gameSession.removePlayer(user);
+            // Save the game session
+            gameSessionService.updateGameSession(gameSession, gameSessionId);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("User not found");
         }
     }
 }

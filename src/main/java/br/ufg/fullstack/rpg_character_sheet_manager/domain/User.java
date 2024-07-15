@@ -1,7 +1,10 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +13,8 @@ import java.util.Objects;
  * A user can be either a player or a game master.
  */
 @Entity(name = "person")
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * The unique identifier for the user.
@@ -50,25 +54,27 @@ public class User {
     /**
      * The list of game sessions where the user is the master.
      */
-    @OneToMany(mappedBy = "master")
+    @OneToMany(mappedBy = "master", targetEntity = GameSession.class)
+    @JsonIgnore
     private List<GameSession> sessionsAsMaster;
 
     /**
      * The list of game sessions where the user is a player.
      */
-    @JsonManagedReference
-    @ManyToMany()
+    @ManyToMany(targetEntity = GameSession.class)
     @JoinTable(
             name = "user_session",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "session_id")
     )
+    @JsonIgnore
     private List<GameSession> sessionsAsPlayer;
 
     /**
      * The list of character sheets owned by the user.
      */
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", targetEntity = CharacterSheet.class)
+    @JsonIgnore
     private List<CharacterSheet> characterSheets;
 
     /**
@@ -107,6 +113,22 @@ public class User {
         sessionsAsPlayer.remove(session);
     }
 
+    /**
+     * Adds a character sheet to the user's list of character sheets.
+     * @param characterSheet the character sheet to be added
+     */
+    public void addCharacterSheet(CharacterSheet characterSheet) {
+        characterSheets.add(characterSheet);
+    }
+
+    /**
+     * Removes a character sheet from the user's list of character sheets.
+     * @param characterSheet the character sheet to be removed
+     */
+    public void removeCharacterSheet(CharacterSheet characterSheet) {
+        characterSheets.remove(characterSheet);
+    }
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -136,11 +158,6 @@ public class User {
 
     public List<CharacterSheet> getCharacterSheets() { return characterSheets; }
     public void setCharacterSheets(List<CharacterSheet> characterSheets) { this.characterSheets = characterSheets; }
-
-
-    public void addCharacterSheet(CharacterSheet characterSheet) {
-        characterSheets.add(characterSheet);
-    }
 
     @Override
     public boolean equals(Object o) {

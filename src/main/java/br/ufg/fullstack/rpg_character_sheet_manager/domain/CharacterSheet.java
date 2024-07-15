@@ -1,16 +1,17 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+/**
+ * Represents a character sheet in the RPG.
+ */
 @Entity
-public class CharacterSheet implements Serializable{
-    private static final long serialVersionUID = 1L;
+public class CharacterSheet {
 
-    /**
-     * The unique identifier for the character sheet.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,51 +19,50 @@ public class CharacterSheet implements Serializable{
     /**
      * The name of the character.
      */
-    @Column(nullable = false)
     private String name;
 
     /**
      * The description of the character.
      */
-    @Column(nullable = false)
     private String description;
 
     /**
      * The background of the character.
      */
-    @Column(nullable = false)
     private String background;
+
+    /**
+     * Whether the character is alive or not.
+     */
+    private Boolean alive;
 
     /**
      * The alignment of the character.
      */
     @ManyToOne
+    @JoinColumn(name = "alignment_id")
     private CharacterAlignment alignment;
 
     /**
-     * Status of the character, if it is alive or dead.
-     */
-    @Column(nullable = false)
-    private boolean alive;
-
-    /**
-     * The type of the character, if it is a player, a non-player character or a monster.
-     */
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private SheetType type;
-
-    /**
-     * The user that owns the character.
+     * The owner of the character.
      */
     @ManyToOne
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     /**
-     * The game session where the character is being played.
+     * The game session the character is part of.
      */
     @ManyToOne
+    @JoinColumn(name = "session_id")
+    @JsonIgnore
     private GameSession session;
+
+    /**
+     * The type of the character sheet (PLAYER or NPC).
+     */
+    @Enumerated(EnumType.STRING)
+    private SheetType type;
 
     // Getters and setters
 

@@ -10,37 +10,65 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
-@RestController("/character-sheets")
+/**
+ * Controller for managing character sheets.
+ */
+@RestController
+@RequestMapping("/character-sheets")
+@CrossOrigin(origins = "*")
 public class CharacterSheetController {
 
     @Autowired
     private CharacterSheetService characterSheetService;
 
     /**
-     * Retrieves all character sheets by page.
+     * Retrieves all character sheets with pagination.
      * @param page the page number
+     * @param size the number of character sheets per page
+     * @param sortBy the field to sort by
+     * @param order the sort order
      * @return a list of CharacterSheets with pagination
-     * @see CharacterSheetService
      */
-    @GetMapping("/page/{page}")
-    public ResponseEntity<Page<CharacterSheet>> getAllCharacterSheets(@PathVariable Integer page) {
-        // Call the service to get all character sheets
-        Page<CharacterSheet> characterSheets = characterSheetService.getAllCharacterSheets(page);
-        // Return the list of character sheets
+    @GetMapping("/page")
+    public ResponseEntity<Page<CharacterSheet>> getAllCharacterSheets(
+            @RequestParam int page,
+            @RequestParam(defaultValue = "24") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String order) {
+        Page<CharacterSheet> characterSheets =
+                characterSheetService.getAllCharacterSheets(page, size, sortBy,
+                order);
         return ResponseEntity.ok(characterSheets);
     }
 
     /**
-     * Retrieves a character sheet by ID.
+     * Retrieves character sheets by user ID with pagination.
+     * @param userId the user ID
+     * @param page the page number
+     * @param size the number of character sheets per page
+     * @param sortBy the field to sort by
+     * @param order the sort order
+     * @return a list of CharacterSheets with pagination
+     */
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Page<CharacterSheet>> getCharacterSheetsByUserId(
+            @PathVariable Long userId,
+            @RequestParam int page,
+            @RequestParam(defaultValue = "24") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String order) {
+        Page<CharacterSheet> characterSheets = characterSheetService.getCharacterSheetsByUserId(userId, page, size, sortBy, order);
+        return ResponseEntity.ok(characterSheets);
+    }
+
+    /**
+     * Retrieves character sheet by ID.
      * @param id the character sheet ID
      * @return a CharacterSheet
-     * @see CharacterSheetService
      */
     @GetMapping("/{id}")
     public ResponseEntity<CharacterSheet> getCharacterSheetById(@PathVariable Long id) {
-        // Call the service to get the character sheet by ID
         CharacterSheet characterSheet = characterSheetService.getCharacterSheetById(id);
-        // Return the character sheet
         return ResponseEntity.ok(characterSheet);
     }
 
@@ -48,35 +76,38 @@ public class CharacterSheetController {
      * Creates a new character sheet.
      * @param characterSheet the CharacterSheet to create
      * @param userId the user ID
-     * @return a ResponseEntity containing the created character sheet
-     * @see CharacterSheetService
+     * @return a ResponseEntity with the location of the created character sheet
      */
-    @PostMapping("user/{userId}")
-    public ResponseEntity<Void> createCharacterSheet(@RequestBody CharacterSheet characterSheet,
-        @PathVariable Long userId) {
-        // Call the service to create a new character sheet
-        CharacterSheet createdCharacterSheet =
-                characterSheetService.createCharacterSheet(characterSheet, userId);
-        // Get the URI of the created character sheet
-        URI characterSheetURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(createdCharacterSheet.getId()).toUri();
-        // Return the created character sheet
-        return ResponseEntity.created(characterSheetURI).build();
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<Void> createCharacterSheet(
+            @RequestBody CharacterSheet characterSheet,
+            @PathVariable Long userId) {
+        CharacterSheet createdCharacterSheet = characterSheetService.createCharacterSheet(characterSheet, userId);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(createdCharacterSheet.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     /**
-     * Updates a character sheet.
+     * Updates an existing character sheet.
      * @param characterSheet the CharacterSheet to update
-     * @return a ResponseEntity containing the updated character sheet
-     * @see CharacterSheetService
+     * @param id the character sheet ID
+     * @return a ResponseEntity with status 204 No Content
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateCharacterSheet(@PathVariable Long id,
-        @RequestBody CharacterSheet characterSheet) {
-        // Call the service to update the character sheet
+    public ResponseEntity<Void> updateCharacterSheet(@RequestBody CharacterSheet characterSheet, @PathVariable Long id) {
         characterSheetService.updateCharacterSheet(characterSheet, id);
-        // Return the updated character sheet
         return ResponseEntity.noContent().build();
     }
 
+    /**
+     * Deletes a character sheet by ID.
+     * @param id the character sheet ID
+     * @return a ResponseEntity with status 204 No Content
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCharacterSheet(@PathVariable Long id) {
+        characterSheetService.deleteCharacterSheet(id);
+        return ResponseEntity.noContent().build();
+    }
 }

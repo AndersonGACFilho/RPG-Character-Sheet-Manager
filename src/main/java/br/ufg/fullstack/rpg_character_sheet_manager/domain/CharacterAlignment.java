@@ -1,10 +1,14 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Represents the alignment of a character in the RPG.
+ */
 @Entity
 public class CharacterAlignment implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -32,7 +36,15 @@ public class CharacterAlignment implements Serializable {
      * The characters that have this alignment.
      */
     @OneToMany(mappedBy = "alignment")
+    @JsonIgnore
     private List<CharacterSheet> characters;
+
+    /**
+     * The game session to which this character alignment belongs.
+     */
+    @ManyToOne
+    @JsonIgnore
+    private GameSession gameSession;
 
     public CharacterAlignment() {
     }
@@ -44,6 +56,7 @@ public class CharacterAlignment implements Serializable {
 
     /**
      * Gets the unique identifier of the character alignment.
+     *
      * @return the unique identifier of the character alignment.
      */
     public Long getId() {
@@ -52,6 +65,7 @@ public class CharacterAlignment implements Serializable {
 
     /**
      * Sets the unique identifier of the character alignment.
+     *
      * @param id the unique identifier of the character alignment.
      */
     public void setId(Long id) {
@@ -60,6 +74,7 @@ public class CharacterAlignment implements Serializable {
 
     /**
      * Gets the name of the character alignment.
+     *
      * @return the name of the character alignment.
      */
     public String getName() {
@@ -68,6 +83,7 @@ public class CharacterAlignment implements Serializable {
 
     /**
      * Sets the name of the character alignment.
+     *
      * @param name the name of the character alignment.
      */
     public void setName(String name) {
@@ -76,6 +92,7 @@ public class CharacterAlignment implements Serializable {
 
     /**
      * Gets the description of the character alignment.
+     *
      * @return the description of the character alignment.
      */
     public String getDescription() {
@@ -84,10 +101,62 @@ public class CharacterAlignment implements Serializable {
 
     /**
      * Sets the description of the character alignment.
+     *
      * @param description the description of the character alignment.
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * Gets the characters that have this alignment.
+     *
+     * @return the characters that have this alignment.
+     */
+    public List<CharacterSheet> getCharacters() {
+        return characters;
+    }
+
+    /**
+     * Sets the characters that have this alignment.
+     *
+     * @param characters the characters that have this alignment.
+     */
+    public void setCharacters(List<CharacterSheet> characters) {
+        this.characters = characters;
+    }
+
+    /**
+     * Gets the game session to which this character alignment belongs.
+     * @return the game session to which this character alignment belongs.
+     */
+    public GameSession getGameSession() {
+        return gameSession;
+    }
+
+    /**
+     * Sets the game session to which this character alignment belongs.
+     * @param gameSession the game session to which this character alignment belongs.
+     */
+    public void setGameSession(GameSession gameSession) {
+        this.gameSession = gameSession;
+    }
+
+    // Adders and removers
+    /**
+     * Adds a character to the list of characters that have this alignment.
+     * @param character the character to add to the list of characters that have this alignment.
+     */
+    public void addCharacter(CharacterSheet character) {
+        characters.add(character);
+    }
+
+    /**
+     * Removes a character from the list of characters that have this alignment.
+     * @param character the character to remove from the list of characters that have this alignment.
+     */
+    public void removeCharacter(CharacterSheet character) {
+        characters.remove(character);
     }
 
     /**

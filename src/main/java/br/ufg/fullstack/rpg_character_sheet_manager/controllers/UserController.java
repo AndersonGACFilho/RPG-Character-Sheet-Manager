@@ -11,88 +11,85 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 /**
- * REST controller for managing users.
+ * Controller for managing users.
  */
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     /**
-     * Retrieves all users.
-     *
-     * @return a list of UserDTOs
+     * Retrieves all users with pagination.
+     * @param page the page number
+     * @param size the number of users per page
+     * @param sortBy the field to sort by
+     * @param order the sort order
+     * @return a list of Users with pagination
      */
-    @GetMapping("/page/{page}")
-    public ResponseEntity<Page<User>> getAllUsers(@PathVariable Integer page) {
-        // Call the service to get all users
-        Page<User> users = userService.getAllUsers(page);
-        // Return the list of users
+    @GetMapping("/page")
+    public ResponseEntity<Page<User>> getAllUsers(
+            @RequestParam int page,
+            @RequestParam(defaultValue = "24") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String order)
+    {
+        Page<User> users = userService.getAllUsers(page, size, sortBy, order);
         return ResponseEntity.ok(users);
     }
 
     /**
-     * Retrieves a user by ID.
-     *
+     * Retrieves user by ID.
      * @param id the user ID
-     * @return a ResponseEntity containing the UserDTO if found, or 404 Not
-     * Found if not found
+     * @return a User
      */
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        // Call the service to get the user by ID
+    public ResponseEntity<User> getUserById(@PathVariable Long id)
+    {
         User user = userService.getUserById(id);
-        // Return the user
         return ResponseEntity.ok(user);
     }
 
     /**
      * Creates a new user.
-     *
      * @param user the User to create
-     * @return a ResponseEntity containing the created user
+     * @return a ResponseEntity with the location of the created user
      */
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody User user) {
-        // Call the service to create a new user
-        User savedUser = userService.createUser(user);
-        // URI of the created user
-        URI userURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(savedUser.getId()).toUri();
-        // Return the created user
-        return ResponseEntity.created(userURI).build();
+    public ResponseEntity<Void> createUser(@RequestBody User user)
+    {
+        User createdUser = userService.createUser(user);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(createdUser.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     /**
      * Updates an existing user.
-     *
+     * @param user the User to update
      * @param id the user ID
-     * @param userDetails the UserDTO with updated data
-     * @return a ResponseEntity containing the updated UserDTO if the user was
-     * found, or 404 Not Found if not found
+     * @return a ResponseEntity with status 204 No Content
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable Long id,
-                                           @RequestBody User userDetails) {
-        // Call the service to update the user
-        userService.updateUser(userDetails, id);
-        // Return the updated user
+    public ResponseEntity<Void> updateUser(
+            @RequestBody User user,
+            @PathVariable Long id)
+    {
+        userService.updateUser(user, id);
         return ResponseEntity.noContent().build();
     }
 
     /**
      * Deletes a user by ID.
-     *
      * @param id the user ID
-     * @return a ResponseEntity with status 200 OK
+     * @return a ResponseEntity with status 204 No Content
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        // Call the service to delete the user
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id)
+    {
         userService.deleteUser(id);
-        // Return a 204 No Content response
         return ResponseEntity.noContent().build();
     }
 }
