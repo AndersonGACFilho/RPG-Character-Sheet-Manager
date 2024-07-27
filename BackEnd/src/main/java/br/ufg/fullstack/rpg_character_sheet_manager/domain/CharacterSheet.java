@@ -1,10 +1,7 @@
 package br.ufg.fullstack.rpg_character_sheet_manager.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.io.Serializable;
 
 /**
  * Represents a character sheet in the RPG.
@@ -171,7 +168,7 @@ public class CharacterSheet {
     }
 
     /**
-     * Sets the type of the character, if it is a player, a non-player character or a monster.
+     * Sets the type of the character if it is a player, a non-player character or a monster.
      * @param type the type of the character, if it is a player, a non-player character or a monster.
      */
     public void setType(SheetType type) {
