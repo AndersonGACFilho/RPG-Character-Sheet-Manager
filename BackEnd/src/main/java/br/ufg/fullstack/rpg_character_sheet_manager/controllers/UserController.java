@@ -31,7 +31,7 @@ public class UserController {
      */
     @GetMapping("/page")
     public ResponseEntity<Page<User>> getAllUsers(
-            @RequestParam int page,
+            @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "24") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String order)
