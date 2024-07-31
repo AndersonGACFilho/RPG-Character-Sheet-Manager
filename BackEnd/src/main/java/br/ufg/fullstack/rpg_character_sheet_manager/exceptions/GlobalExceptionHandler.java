@@ -9,13 +9,25 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * This class represents a global exception handler.
+ * <p>
+ * This class is responsible for handling exceptions that are not handled by the controllers.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handle the ResourceNotFoundException.
+     * @param ex the exception.
+     * @param request the request.
+     * @return the response entity.
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<StandardError> handleResourceNotFoundException(ResourceNotFoundException ex,
-                                                                         HttpServletRequest request) {
+                                                                         HttpServletRequest request)
+    {
         StandardError error = new StandardError(
                 System.currentTimeMillis(),
                 HttpStatus.NOT_FOUND.value(),
@@ -26,10 +38,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    /**
+     * Handle the DataIntegrityViolationException.
+     * @param ex the exception.
+     * @param request the request.
+     * @return the response entity.
+     */
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<StandardError> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
-                                                                              HttpServletRequest request) {
+        HttpServletRequest request)
+    {
         StandardError error = new StandardError(
                 System.currentTimeMillis(),
                 HttpStatus.BAD_REQUEST.value(),

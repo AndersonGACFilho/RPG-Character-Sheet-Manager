@@ -44,17 +44,17 @@ public class CharacterSheetService {
 
     /**
      * Get all character sheets by user
-     * @param userId the user ID
      * @param page the page number
      * @param size the number of items per page
      * @param sortBy the field to sort by a character sheet field
      * @param order the sort order
      * @return Page<CharacterSheet> with all character sheets
      */
-    public Page<CharacterSheet> getCharacterSheetsByUserId(Long userId,
-                                                           Integer page, Integer size, String sortBy, String order) {
+    public Page<CharacterSheet> getCharacterSheetsByUserId(Integer page, Integer size, String sortBy, String order) {
         // Create a pageable object to return only 10 results per page
         Pageable pageable = PageRequest.of(page, 10);
+        // Get the user ID from the authenticated user
+        Long userId = userService.getUser().getId();
         // Return all character sheets by user
         return characterSheetRepository.findByOwnerId(userId, pageable);
     }
@@ -72,19 +72,19 @@ public class CharacterSheetService {
     }
 
     /**
-     * Create a new character sheet
+     * Create a new character sheet at the logged user
      * @param characterSheet the character sheet to create
      * @return CharacterSheet created
      */
-    public CharacterSheet createCharacterSheet(CharacterSheet characterSheet, Long userId) {
+    public CharacterSheet createCharacterSheet(CharacterSheet characterSheet) {
         // Get the user by ID
-        User user = userService.getUserById(userId);
+        User user = userService.getUser();
         // Add the character sheet to the user's list of character sheets
         user.addCharacterSheet(characterSheet);
         // Set the user of the character sheet
         characterSheet.setOwner(user);
         // Save the user
-        userService.updateUser(user, userId);
+        userService.updateUser(user);
         return characterSheetRepository.save(characterSheet);
     }
 

@@ -6,106 +6,169 @@ import br.ufg.fullstack.rpg_character_sheet_manager.domain.User;
 import br.ufg.fullstack.rpg_character_sheet_manager.exceptions.ResourceNotFoundException;
 import br.ufg.fullstack.rpg_character_sheet_manager.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 /**
- * Service class for managing users.
- * This class handles the business logic related to users.
+ * This class represents the service for the User entity.
+ * <p>
+ * This class provides methods to interact with the User entity.
  */
 @Service
 public class UserService {
 
+    /**
+     * The logger.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    /**
+     * The repository for the user entity.
+     */
     @Autowired
     private UserRepository userRepository;
+    /**
+     * The character sheet service.
+     */
     @Autowired
-    @Lazy
     private CharacterSheetService characterSheetService;
+    /**
+     * The game session service.
+     */
     @Autowired
-    @Lazy
     private GameSessionService gameSessionService;
 
+    public User getUser() {
+        // Get the authenticated user
+        logger.info("Getting the authenticated user");
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        // Get the email of the authenticated user
+        logger.info("Getting the email of the authenticated user");
+        String authenticatedUserEmail = authentication.getName();
+        // Get the user by the email
+        logger.info("Getting the user by the email");
+        return userRepository.findByEmail(authenticatedUserEmail)
+            .orElseThrow(() ->
+            new ResourceNotFoundException("User not found with email: " + authenticatedUserEmail));
+    }
+
     /**
-     * Retrieves all users and converts them to Users.
-     *
-     * @param page   the page number
-     * @param size  the number of users per page
-     * @param sortBy the field to sort by
-     * @param order the sort order
-     * @return a list of Users
+     * Get all users.
+     * @param page of the page (number of the page).
+     * @param size of the page (number of users).
+     * @param sort of the page (field name).
+     * @param direction of the page (ASC or DESC).
+     * @return Page of users.
      */
-    public Page<User> getAllUsers(Integer page, Integer size, String sortBy,
-        String order) {
+    public Page<User> getAllUsers(
+        int page, int size, String sort, String direction)
+    {
+        // Create a pageable object
+        logger.info("Creating a pageable object");
         PageRequest pageable = PageRequest.of(page, size,
-            Sort.Direction.fromString(order), sortBy);
+            Sort.Direction.fromString(direction), sort);
+        // Get all users
         return userRepository.findAll(pageable);
     }
 
     /**
-     * Retrieves a user by ID and converts it to a User.
+     * Creates a new user.
      *
-     * @param id the user ID
-     * @return an Optional containing the User if found, or empty if not
-     * found
+     * @return The created user.
      */
-    public User getUserById(Long id) {
-        // Fetch the User entity by ID from the repository
-        Optional<User> user = userRepository.findById(id);
-        // If the User entity was found, convert it to a User and return it
-        // If the User entity was not found, throw a ResourceNotFoundException
-        return user.orElseThrow( () -> new ResourceNotFoundException("User not found"));
+    public User createUser(User user) {
+        try {
+            // Save the user
+            logger.info("Saving the user");
+            logger.info("User: " + user.getEmail());
+            // Hash the password
+            logger.info("Hashing the password");
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+            // Save the user
+            logger.info("Saving the user");
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            logger.error("Error saving the user");
+            logger.error(e.getMessage());
+            throw new DataIntegrityViolationException("The user already with email: " + user.getEmail(), e);
+        }
     }
 
     /**
-     * Creates a new user and converts it to a User.
+     * Gets the user by the user id.
      *
-     * @param user the User
-     * @return the created User
+     * @param userId The user id.
+     * @return The user with the given user id.
      */
-    public User createUser(User user) {
-        // Save the User entity to the repository
-        // Convert the saved User entity back to a User
+    public User getUser(Long userId) {
+        // Get the user by the user id
+        logger.info("Getting the user by the user id");
+        return userRepository.findById(userId).orElseThrow(
+            () -> new ResourceNotFoundException("User not found with id " + userId));
+    }
+
+    /**
+     * Updates the user.
+     * @param user The user to be updated.
+     * @return The updated user.
+     */
+    public User updateUser(User user) {
+        // Get the existing user
+        logger.info("Getting the existing user by the user id");
+        User existingUser = getUser();
+        // Set the id of the existing authenticated user to the new user
+        logger.info("Setting the id of the existing logged-in user to the new user");
+        user.setId(existingUser.getId());
+
+        // Update the user
+        logger.info("Updating the user by the authenticated user");
         return userRepository.save(user);
     }
 
     /**
-     * Updates an existing user and converts it to a User.
-     *
-     * @param updatedUser the User with updated data
-     * @param id
+     * Updates the user by ID.
+     * @param user The user to be updated.
+     * @return The updated user.
      */
-    public void updateUser(User updatedUser, Long id) {
-        // Force the User entity to have the ID of the UserDTO
-        updatedUser.setId(id);
-        // get the User entity by ID from the service
-        User user = getUserById(id);
-        // save the updated User entity to the repository
-        userRepository.save(updatedUser);
+    public User updateUser(User user, Long id) {
+        // Get the existing user
+        logger.info("Getting the existing user by ID");
+        User existingUser = getUser(id);
+        // Set the id of the existing user to the new user
+        logger.info("Setting the id of the existing user to the new user");
+        existingUser.setId(user.getId());
+
+        // Update the user
+        logger.info("Updating the user by ID");
+        return userRepository.save(existingUser);
     }
 
     /**
-     * Deletes a user by ID.
-     * @param id the user ID
+     * Deletes a user currently logged in.
      */
     @Transactional(rollbackOn = Exception.class)
-    public void deleteUser(Long id) {
+    public void deleteUser() {
         try {
-            User user = getUserById(id);
+            User user = getUser();
 
             // Remove all character sheets from the user
+            logger.info("Removing all character sheets from the user");
             List<CharacterSheet> characterSheets =
                     new ArrayList<>(user.getCharacterSheets());
             for (CharacterSheet characterSheet : characterSheets) {
+                logger.info("Deleting the character sheet");
                 characterSheetService.deleteCharacterSheet(characterSheet.getId());
                 user.getCharacterSheets().remove(characterSheet);
             }
@@ -114,6 +177,7 @@ public class UserService {
             List<GameSession> sessionsAsMaster =
                     new ArrayList<>(user.getSessionsAsMaster());
             for (GameSession session : sessionsAsMaster) {
+                logger.info("Deleting the game session");
                 gameSessionService.deleteGameSession(session.getId());
                 user.getSessionsAsMaster().remove(session);
             }
@@ -122,12 +186,13 @@ public class UserService {
             List<GameSession> sessionsAsPlayer =
                     new ArrayList<>(user.getSessionsAsPlayer());
             for (GameSession session : sessionsAsPlayer) {
+                logger.info("Removing the user from the game session");
                 gameSessionService.removePlayerFromGameSession(user.getId(),
                         session.getId());
                 user.getSessionsAsPlayer().remove(session);
             }
 
-            // Finally delete the user
+            // Finally, delete the user
             userRepository.delete(user);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException(
@@ -139,14 +204,34 @@ public class UserService {
 
 
     /**
-     * Adds a user as a player to a game session.
+     * Removes the logged-in user from a game session.
+     * @param gameSessionId the game session ID
+     */
+    public void removePlayerFromGameSession(Long gameSessionId){
+        try{
+            logger.info("Removing the player from the game session");
+            User user = getUser();
+            // Find the game session by ID
+            logger.info("Finding the game session by ID");
+            GameSession gameSession = gameSessionService.
+                getGameSessionById(gameSessionId);
+            // Remove the user from the game session
+            gameSession.removePlayer(user);
+            // Save the game session
+            gameSessionService.updateGameSession(gameSession, gameSessionId);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("User not found");
+        }
+    }
+
+    /**
+     * Removes the logged-in user from a game session by IDs.
      * @param id the user ID
      * @param gameSessionId the game session ID
      */
     public void removePlayerFromGameSession(Long id, Long gameSessionId){
         try{
-            // Find the user by ID
-            User user = getUserById(id);
+            User user = getUser();
             // Find the game session by ID
             GameSession gameSession = gameSessionService.
                     getGameSessionById(gameSessionId);

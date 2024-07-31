@@ -65,34 +65,34 @@ public class GameSessionService {
 
     /**
      * Retrieves all game sessions by master.
-     * @param masterId the master ID
      * @param page the page number
      * @return a list of GameSessionDTOs
      */
-    public Page<GameSession> getGameSessionsByMasterId(Long masterId, Integer page)
+    public Page<GameSession> getGameSessionsByMaster(Integer page)
     {
         // Fetch all GameSession entities by master from the repository
         PageRequest pageable = PageRequest.of(page, 10);
+        // Get the authenticated user
+        User master = userService.getUser();
         // Return the list of game sessions by master
-        return gameSessionRepository.findByMasterId(masterId, pageable);
+        return gameSessionRepository.findByMasterId(master.getId(), pageable);
     }
 
     /**
-     * Create a new game session.
+     * Create a new game session for the authenticated user.
      * @param gameSession the game session to create
-     * @param masterId the ID of the master user
      * @return the created GameSession
      */
-    public GameSession createGameSession(GameSession gameSession, Long masterId)
+    public GameSession createGameSession(GameSession gameSession)
     {
         // Find the master by ID
-        User master = userService.getUserById(masterId);
+        User master = userService.getUser();
         // Add the game session to the master's list of game sessions
         master.addSessionAsMaster(gameSession);
         // Set the master of the game session
         gameSession.setMaster(master);
         // Save the master
-        userService.updateUser(master, masterId);
+        userService.updateUser(master, master.getId());
         // Save the game session
         return gameSessionRepository.save(gameSession);
     }
@@ -119,10 +119,10 @@ public class GameSessionService {
     @Transactional(rollbackOn = Exception.class)
     public void deleteGameSession(Long id)
     {
+        // Verify if is an existing game session of the authenticated user
+        GameSession gameSession = getGameSession(id);
         try
         {
-            // Remove all players from the game session
-            GameSession gameSession = getGameSessionById(id);
             // Remove the game session from the master's list of game sessions
             User master = gameSession.getMaster();
             // Remove the character sheets from the game session
@@ -193,6 +193,38 @@ public class GameSessionService {
     }
 
     /**
+     * Get a game session by ID only if it belongs to the authenticated user.
+     * @param id the game session ID
+     * @return a GameSession
+     * @throws ResourceNotFoundException if the game session was not found at the authenticated user
+     */
+    public GameSession getGameSession(Long id) {
+        GameSession gameSession = null;
+        for (GameSession session : userService.getUser().getSessionsAsMaster())
+        {
+            if (session.getId().equals(id))
+            {
+                gameSession = session;
+                break;
+            }
+        }
+        for (GameSession session : userService.getUser().getSessionsAsPlayer())
+        {
+            if (session.getId().equals(id))
+            {
+                gameSession = session;
+                break;
+            }
+        }
+        // If the game session was not found, throw a ResourceNotFoundException
+        if (gameSession == null)
+        {
+            throw new ResourceNotFoundException("Game session not found");
+        }
+        return gameSession;
+    }
+
+    /**
      * Remove a player from a game session.
      * @param id the player ID
      * @param gameSessionId the game session ID
@@ -203,9 +235,9 @@ public class GameSessionService {
         try
         {
             // Find the user by ID
-            User user = userService.getUserById(id);
+            User user = userService.getUser(id);
             // Find the game session by ID
-            GameSession gameSession = getGameSessionById(gameSessionId);
+            GameSession gameSession = getGameSession(gameSessionId);
             // Remove the user from the game session
             gameSession.removePlayer(user);
             // Save the game session
@@ -216,6 +248,10 @@ public class GameSessionService {
             // If the user was not found, throw a DataIntegrityViolationException
             throw new DataIntegrityViolationException(" When removing player " +
                 "from game session, occurred a DataIntegrityViolationException");
+        }
+        catch (ResourceNotFoundException e)
+        {
+            throw new ResourceNotFoundException(e.getMessage());
         }
         catch (Exception e)
         {

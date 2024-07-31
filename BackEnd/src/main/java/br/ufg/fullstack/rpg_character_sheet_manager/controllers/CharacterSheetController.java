@@ -42,22 +42,20 @@ public class CharacterSheetController {
     }
 
     /**
-     * Retrieves character sheets by user ID with pagination.
-     * @param userId the user ID
+     * Retrieves character sheets by logged-in user with pagination.
      * @param page the page number
      * @param size the number of character sheets per page
      * @param sortBy the field to sort by
      * @param order the sort order
      * @return a list of CharacterSheets with pagination
      */
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<Page<CharacterSheet>> getCharacterSheetsByUserId(
-            @PathVariable Long userId,
+    @GetMapping("/user")
+    public ResponseEntity<Page<CharacterSheet>> getCharacterSheetsOfUser(
             @RequestParam int page,
             @RequestParam(defaultValue = "24") int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String order) {
-        Page<CharacterSheet> characterSheets = characterSheetService.getCharacterSheetsByUserId(userId, page, size, sortBy, order);
+        Page<CharacterSheet> characterSheets = characterSheetService.getCharacterSheetsByUserId(page, size, sortBy, order);
         return ResponseEntity.ok(characterSheets);
     }
 
@@ -73,16 +71,15 @@ public class CharacterSheetController {
     }
 
     /**
-     * Creates a new character sheet.
+     * Creates a new character sheet owned by a user which is logged in.
      * @param characterSheet the CharacterSheet to create
-     * @param userId the user ID
      * @return a ResponseEntity with the location of the created character sheet
      */
-    @PostMapping("/user/{userId}")
+    @PostMapping("/user/")
     public ResponseEntity<Void> createCharacterSheet(
-            @RequestBody CharacterSheet characterSheet,
-            @PathVariable Long userId) {
-        CharacterSheet createdCharacterSheet = characterSheetService.createCharacterSheet(characterSheet, userId);
+            @RequestBody CharacterSheet characterSheet)
+    {
+        CharacterSheet createdCharacterSheet = characterSheetService.createCharacterSheet(characterSheet);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdCharacterSheet.getId()).toUri();
         return ResponseEntity.created(uri).build();

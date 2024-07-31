@@ -22,18 +22,16 @@ public class GameSessionController {
     private GameSessionService gameSessionService;
 
     /**
-     * Retrieves all game sessions by master with pagination.
-     * @param masterId the master ID
+     * Retrieves all game sessions by authenticated master with pagination.
      * @param page the page number
      * @return a list of GameSessions with pagination
      */
-    @GetMapping("/master/{masterId}/page/{page}")
+    @GetMapping("/master/page/{page}")
     public ResponseEntity<Page<GameSession>> getGameSessionsByMasterId(
-            @PathVariable Long masterId,
             @PathVariable int page)
     {
         Page<GameSession> gameSessions =
-                gameSessionService.getGameSessionsByMasterId(masterId, page);
+                gameSessionService.getGameSessionsByMaster(page);
         return ResponseEntity.ok(gameSessions);
     }
 
@@ -46,23 +44,21 @@ public class GameSessionController {
     public ResponseEntity<GameSession> getGameSessionById(
             @PathVariable Long id)
     {
-        GameSession gameSession = gameSessionService.getGameSessionById(id);
+        GameSession gameSession = gameSessionService.getGameSession(id);
         return ResponseEntity.ok(gameSession);
     }
 
     /**
-     * Creates a new game session.
+     * Creates a new game session of the authenticated user.
      * @param gameSession the GameSession to create
-     * @param masterId the master ID
      * @return a ResponseEntity with the location of the created game session
      */
-    @PostMapping("/master/{masterId}")
+    @PostMapping("/master/")
     public ResponseEntity<Void> createGameSession(
-            @RequestBody GameSession gameSession,
-            @PathVariable Long masterId)
+            @RequestBody GameSession gameSession)
     {
         GameSession createdGameSession =
-                gameSessionService.createGameSession(gameSession, masterId);
+                gameSessionService.createGameSession(gameSession);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdGameSession.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -94,7 +90,7 @@ public class GameSessionController {
      * @param id the game session ID
      * @return a ResponseEntity with status 204 No Content
      */
-    @PutMapping("/master/{masterId}/{id}")
+    @PutMapping("/master/{id}")
     public ResponseEntity<Void> updateGameSession(
             @RequestBody GameSession gameSession,
             @PathVariable Long id)
