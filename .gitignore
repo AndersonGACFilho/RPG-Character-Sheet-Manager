@@ -1,10 +1,3 @@
-# Frontend
-# Purpose: Ignore node_modules folder
-*/node_modules/*
-!*/node_modules/.gitkeep
-
-#Backend
-# Purpose: Ignore target folder
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -22,6 +15,7 @@ target/
 
 ### IntelliJ IDEA ###
 .idea
+.idea/*
 *.iws
 *.iml
 *.ipr
@@ -38,3 +32,4 @@ build/
 
 ### VS Code ###
 .vscode/
+
