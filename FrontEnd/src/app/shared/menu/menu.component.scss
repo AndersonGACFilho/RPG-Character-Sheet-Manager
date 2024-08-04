@@ -1,0 +1,17 @@
+svg {
+    width: 1.5em;
+}
+
+div > span {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 4px;
+    margin-right: 4px;
+}
+
+div {
+    position: absolute;
+    background-color: #ffffff40;
+    height: 2em;
+}

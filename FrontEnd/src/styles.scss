@@ -2,3 +2,11 @@
 
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+body {
+    height: 100vh;
+    background-image: url('https://external-preview.redd.it/3-years-of-work-from-a-bunch-of-tabletop-rpg-nerds-today-v0-Rpwp4NDXR_8aQfVuF-GF7u51Qza2UdKm5fCnj0lmoTY.png?format=pjpg&auto=webp&s=f95de4087998c9903301cf91de44da9c12b2cdaf');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
