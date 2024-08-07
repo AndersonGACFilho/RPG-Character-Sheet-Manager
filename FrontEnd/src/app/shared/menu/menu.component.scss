@@ -1,17 +1,18 @@
 svg {
     width: 1.5em;
-}
-
-div > span {
     cursor: pointer;
-    display: flex;
-    flex-direction: row-reverse;
-    margin-top: 4px;
-    margin-right: 4px;
 }
 
-div {
+.top {
+    width: 100vw;
     position: absolute;
-    background-color: #ffffff40;
+    background: rgb(255 237 179 / 50%);
     height: 2em;
+    z-index: 999;
+}
+
+.text {
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
 }

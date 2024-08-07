@@ -4,13 +4,17 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.scss'
+  styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
-    constructor(private router: Router) {}
+  constructor(private router: Router) {}
+  
+  signOut() {
+    localStorage.removeItem('login');
+    this.router.navigate(['login']);
+  }
 
-    signOut() {
-        localStorage.removeItem('login');
-        this.router.navigate(['login']);
-    }
+  home() {
+    this.router.navigate(['home']);
+  }
 }

@@ -1,0 +1,18 @@
+<app-menu></app-menu>
+<div class="container">
+  <div class="align-items-center justify-content-evenly row">
+    <div class="col-3 m-3" *ngFor="let sessao of sessoes">
+        <div class="card card-body card-home">
+            <div class="text-center">
+                <h2>{{sessao.name}}</h2>
+                <p>{{sessao.description}}</p>
+                <br />
+            </div>
+            <div class="d-flex justify-content-around">
+                <button class="btn btn-danger" (click)="deletarSessao(sessao.id!)">Deletar</button>
+                <button class="btn btn-secondary" (click)="alterarSessao(sessao.id!)">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

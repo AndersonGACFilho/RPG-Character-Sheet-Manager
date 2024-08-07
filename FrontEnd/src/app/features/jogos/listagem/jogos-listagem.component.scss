@@ -1,0 +1,20 @@
+.card-home {
+    background-color: rgb(255 237 179 / 63%);
+}
+
+.container {
+    margin-bottom: 26px;
+    overflow-y: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.container::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+.row {
+    margin-top: 32px;
+    height: calc(100vh - 32px - 26px);
+}

@@ -9,7 +9,11 @@ const routes: Routes = [
         component: JogosListagemComponent
     },
     {
-        path: 'edit',
+        path: 'new',
+        component: JogosComponent
+    },
+    {
+        path: 'new/:id',
         component: JogosComponent
     }
 ];

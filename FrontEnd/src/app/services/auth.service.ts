@@ -1,26 +1,20 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IUser } from '../models/user.type';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private httpClient: HttpClient) { }
+  constructor(private apiService: ApiService) { }
 
-  loginMock(user: IUser): Observable<string> {
-    if (user.email == 'filipe@a' && user.password == 'test') {
-      return of('token');
-    }
-
-    return of();
-  }
-
-  login(user: IUser): Observable<unknown> {
-    return this.httpClient.post('http://localhost:8080/users/login', {
+  login(user: IUser): Observable<string> {
+    return this.apiService.post<string>('/users/login', {
       email: user.email,
       password: user.password
+    }, {
+      responseType: 'text' as 'json'
     });
   }
 

@@ -1,19 +1,75 @@
 <div class="container">
-    <div class="vh-100 align-items-center justify-content-md-center row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="card card-body">
-                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-                    <div class="form-group">
-                        <label for="email" class="form-label text-white">Email</label>
-                        <input type="email" formControlName="email" class="form-control" id="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password" class="form-label text-white">Senha</label>
-                        <input type="password" formControlName="password" class="form-control" id="password" required>
-                    </div>
-                    <button class="btn btn-success mt-2" [disabled]="loading">Entrar</button>
-                </form>
+  <div class="vh-100 align-items-center justify-content-md-center row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="card card-body">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group mb-4">
+            <label
+              for="email"
+              class="form-label text-white"
+              [ngClass]="{
+                'error-label':
+                  emailControls.invalid &&
+                  (emailControls.dirty || emailControls.touched)
+              }"
+              >Email</label
+            >
+            <input
+              type="email"
+              formControlName="email"
+              class="form-control"
+              id="email"
+              required
+              [ngClass]="{
+                'is-invalid':
+                  emailControls.invalid &&
+                  (emailControls.dirty || emailControls.touched)
+              }"
+            />
+            <div
+              *ngIf="
+                emailControls.invalid &&
+                (emailControls.dirty || emailControls.touched)
+              "
+              class="erro"
+            >
+              <div *ngIf="emailControls.errors?.['required']">
+                Email é obrigatório.
+              </div>
+              <div *ngIf="emailControls.errors?.['email']">Email inválido.</div>
             </div>
-        </div>
+          </div>
+          <div class="form-group ">
+            <label for="password" class="form-label text-white">Senha</label>
+            <input
+              type="password"
+              formControlName="password"
+              class="form-control"
+              id="password"
+              required
+            />
+            <div
+              *ngIf="
+                passwordControls.invalid &&
+                (passwordControls.dirty || passwordControls.touched)
+              "
+              class="alert"
+            >
+              <div *ngIf="passwordControls.errors?.['required']">
+                Senha é obrigatória.
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-primary mt-2" (click)="criarUsuario()">
+              Criar Usuário
+            </button>
+            <button class="btn btn-success mt-2" [disabled]="loading">
+              Entrar
+            </button>
+          </div>        
+        </form>
+      </div>
     </div>
+  </div>
 </div>

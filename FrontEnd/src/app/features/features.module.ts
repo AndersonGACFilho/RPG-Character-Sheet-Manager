@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { FeaturesRoutingModule } from './features-routing.module';
 import { JogosHomeComponent } from './home/home.component';
-import { MenuComponent } from '../shared/menu/menu.component';
+import { MenuModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [JogosHomeComponent, MenuComponent],
+  declarations: [JogosHomeComponent],
   imports: [
     CommonModule,
     FeaturesRoutingModule,
-  ]
+    MenuModule,
+  ],
 })
-export class FeaturesModule { }
+export class FeaturesModule {}

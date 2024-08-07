@@ -1,0 +1,139 @@
+<div class="container">
+    <div class="vh-100 align-items-center justify-content-md-center row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="card card-body">
+          <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label
+                for="email"
+                class="form-label text-white"
+                [ngClass]="{
+                  'error-label':
+                    emailControls.invalid &&
+                    (emailControls.dirty || emailControls.touched)
+                }"
+                >Email</label
+              >
+              <input
+                type="email"
+                formControlName="email"
+                class="form-control"
+                id="email"
+                required
+                [ngClass]="{
+                  'is-invalid':
+                    emailControls.invalid &&
+                    (emailControls.dirty || emailControls.touched)
+                }"
+              />
+              <div
+                *ngIf="
+                  emailControls.invalid &&
+                  (emailControls.dirty || emailControls.touched)
+                "
+                class="erro"
+              >
+                <div *ngIf="emailControls.errors?.['required']">
+                  Email é obrigatório.
+                </div>
+                <div *ngIf="emailControls.errors?.['email']">Email inválido.</div>
+              </div>
+            </div>
+            <div class="form-group ">
+              <label for="password" class="form-label text-white">Senha</label>
+              <input
+                type="password"
+                formControlName="password"
+                class="form-control"
+                id="password"
+                required
+              />
+              <div
+                *ngIf="
+                  passwordControls.invalid &&
+                  (passwordControls.dirty || passwordControls.touched)
+                "
+                class="alert"
+              >
+                <div *ngIf="passwordControls.errors?.['required']">
+                  Senha é obrigatória.
+                </div>
+              </div>
+            </div>
+            <div class="form-group ">
+                <label for="firstName" class="form-label text-white">Nome</label>
+                <input
+                  type="firstName"
+                  formControlName="firstName"
+                  class="form-control"
+                  id="firstName"
+                  required
+                />
+                <div
+                  *ngIf="
+                    firstNameControls.invalid &&
+                    (firstNameControls.dirty || firstNameControls.touched)
+                  "
+                  class="alert"
+                >
+                  <div *ngIf="firstNameControls.errors?.['required']">
+                    Nome é obrigatório.
+                  </div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="lastName" class="form-label text-white">Sobrenome</label>
+                <input
+                  type="lastName"
+                  formControlName="lastName"
+                  class="form-control"
+                  id="lastName"
+                  required
+                />
+                <div
+                  *ngIf="
+                    lastNameControls.invalid &&
+                    (lastNameControls.dirty || lastNameControls.touched)
+                  "
+                  class="alert"
+                >
+                  <div *ngIf="lastNameControls.errors?.['required']">
+                    Sobrenome é obrigatório.
+                  </div>
+                </div>
+            </div>
+            <div class="form-group ">
+                <label for="username" class="form-label text-white">Usuário</label>
+                <input
+                  type="username"
+                  formControlName="username"
+                  class="form-control"
+                  id="username"
+                  required
+                />
+                <div
+                  *ngIf="
+                    usernameControls.invalid &&
+                    (usernameControls.dirty || usernameControls.touched)
+                  "
+                  class="alert"
+                >
+                  <div *ngIf="usernameControls.errors?.['required']">
+                    Usuário é obrigatório.
+                  </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-primary mt-2" (click)="login()">
+                  Já sou cadastrado
+                </button>
+                <button class="btn btn-success mt-2" [disabled]="loading">
+                  Salvar
+                </button>
+              </div> 
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
