@@ -53,7 +53,9 @@ export class LoginComponent {
               this.authService.saveLogin(result);
               this.router.navigate(['/home']);
             }
-            this.toastr.error('Usuário ou Senha inválido.');
+            else {
+              this.toastr.error('Usuário ou Senha inválido.');
+            }
           },
           error: () => this.toastr.error('Usuário ou Senha inválido.')
         });

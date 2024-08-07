@@ -10,7 +10,7 @@ export class UserService {
   constructor(private apiService: ApiService) {}
 
   criarUsuario(user: IUserRegister) {
-    return this.apiService.post('/user/register', user);
+    return this.apiService.post('/users/register', user);
   }
 
 }
